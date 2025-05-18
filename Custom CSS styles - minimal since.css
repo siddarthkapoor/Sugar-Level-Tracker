@@ -1,0 +1,73 @@
+/* Custom CSS styles - minimal since we're using Bootstrap */
+
+/* Sugar level badge colors based on range */
+.sugar-normal {
+  background-color: var(--bs-success);
+}
+
+.sugar-elevated {
+  background-color: var(--bs-warning);
+}
+
+.sugar-high {
+  background-color: var(--bs-danger);
+}
+
+/* Custom vertical spacing */
+.section-gap {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+/* Form elements styling */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+/* Toast positioning */
+#toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1050;
+}
+
+/* Custom table styles */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Add borders to differentiate rows better in dark mode */
+.table-dark tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Custom form control styling */
+textarea.form-control {
+  min-height: 80px;
+}
+
+/* Empty state styling */
+.empty-state {
+  padding: 3rem;
+  text-align: center;
+  color: var(--bs-secondary);
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+/* Custom card styling */
+.card {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-bottom: none;
+}
