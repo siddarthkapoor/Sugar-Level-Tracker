@@ -1,0 +1,198 @@
+{% extends "layout.html" %}
+
+{% block title %}Sugar Level Tracker - Home{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0">
+                    <i class="bi bi-clipboard-data me-2"></i>Sugar Level Tracker
+                </h2>
+            </div>
+            <div class="card-body">
+                <p class="lead">Track your daily sugar levels and meal information to better manage your health.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Entry Form -->
+    <div class="col-lg-5 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h3 class="mb-0">Record New Entry</h3>
+            </div>
+            <div class="card-body">
+                <form id="entry-form">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label for="date" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="date" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label for="time" class="form-label">Time</label>
+                                <input type="time" class="form-control" id="time" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="sugar-level" class="form-label">Sugar Level (mg/dL)</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="sugar-level" 
+                                  placeholder="Enter your sugar level" min="1" max="1000" required>
+                            <span class="input-group-text sugar-level-indicator">
+                                <i class="bi bi-circle-fill"></i>
+                            </span>
+                        </div>
+                        <div class="form-text">
+                            <span class="badge bg-success me-1">Normal: < 140</span>
+                            <span class="badge bg-warning me-1">Elevated: 140-180</span>
+                            <span class="badge bg-danger">High: > 180</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="breakfast" class="form-label">Breakfast</label>
+                        <textarea class="form-control" id="breakfast" rows="2" 
+                                  placeholder="What did you eat for breakfast?"></textarea>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="lunch" class="form-label">Lunch</label>
+                        <textarea class="form-control" id="lunch" rows="2" 
+                                  placeholder="What did you eat for lunch?"></textarea>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="dinner" class="form-label">Dinner</label>
+                        <textarea class="form-control" id="dinner" rows="2" 
+                                  placeholder="What did you eat for dinner?"></textarea>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="snacks" class="form-label">Snacks</label>
+                        <textarea class="form-control" id="snacks" rows="2" 
+                                  placeholder="What snacks did you have?"></textarea>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="notes" class="form-label">Additional Notes</label>
+                        <textarea class="form-control" id="notes" rows="2"
+                                  placeholder="Any additional notes, observations, exercise, etc."></textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-flex">
+                        <button type="submit" id="submit-btn" class="btn btn-primary flex-grow-1">Add Entry</button>
+                        <button type="button" id="cancel-btn" class="btn btn-secondary d-none">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Entries Table -->
+    <div class="col-lg-7 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">Your Entries</h3>
+                <div>
+                    <button class="btn btn-outline-info btn-sm" id="export-btn" title="Export data as CSV">
+                        <i class="bi bi-download me-1"></i> Export
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Search and filter controls -->
+                <div class="mb-3 p-3 border rounded" id="filters-container">
+                    <div class="row g-2 mb-2">
+                        <div class="col-md-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                <input type="text" class="form-control" id="search-input" placeholder="Search meals or notes">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text">From</span>
+                                <input type="date" class="form-control" id="filter-date-from">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text">To</span>
+                                <input type="date" class="form-control" id="filter-date-to">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md-8">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input type="checkbox" class="btn-check" id="filter-normal" autocomplete="off" checked>
+                                <label class="btn btn-outline-success" for="filter-normal">Normal</label>
+                                
+                                <input type="checkbox" class="btn-check" id="filter-elevated" autocomplete="off" checked>
+                                <label class="btn btn-outline-warning" for="filter-elevated">Elevated</label>
+                                
+                                <input type="checkbox" class="btn-check" id="filter-high" autocomplete="off" checked>
+                                <label class="btn btn-outline-danger" for="filter-high">High</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-outline-secondary btn-sm" id="reset-filters-btn">
+                                <i class="bi bi-x-circle me-1"></i>Reset Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart for visualizing data -->
+                <div id="chart-container" class="mb-3 d-none">
+                    <canvas id="sugar-chart"></canvas>
+                </div>
+                
+                <!-- Empty state message -->
+                <div id="empty-state" class="empty-state">
+                    <i class="bi bi-clipboard"></i>
+                    <h4>No entries yet</h4>
+                    <p>Start by adding your first sugar level and meal entry using the form.</p>
+                </div>
+
+                <!-- Filter empty state -->
+                <div id="filter-empty-state" class="empty-state d-none">
+                    <i class="bi bi-funnel"></i>
+                    <h4>No matching entries</h4>
+                    <p>Try adjusting your search criteria or add more entries.</p>
+                </div>
+                
+                <!-- Entries table -->
+                <div id="entries-table" class="table-responsive d-none">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Sugar Level</th>
+                                <th>Meals</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="entries-list">
+                            <!-- Entries will be inserted here dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}
